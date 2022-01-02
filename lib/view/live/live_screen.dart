@@ -13,6 +13,8 @@ import 'package:live_tv/bloc/stream_bloc/stream_state.dart';
 import 'package:live_tv/common/config/configuration.dart';
 import 'package:live_tv/common/constants/icon_constants.dart';
 import 'package:live_tv/common/constants/layout_constants.dart';
+import 'package:live_tv/common/extensions/resolution_preset_extensions.dart';
+import 'package:live_tv/view/live/widget/change_resolution_widget.dart';
 import 'package:live_tv/view/theme/theme_color.dart';
 import 'package:live_tv/view/theme/theme_text.dart';
 import 'package:live_tv/view/widget/button_widget/label_button_widget.dart';
@@ -33,9 +35,13 @@ class _LiveScreenState extends State<LiveScreen> {
   List<CameraDescription> cameras = [];
   final TextEditingController _streamTitleController = TextEditingController();
   final TextEditingController _commentController = TextEditingController();
+  final ValueNotifier<ResolutionPreset> _resolutionValue =
+      ValueNotifier(ResolutionPreset.max);
+  final ValueNotifier<bool> _cameraDescription = ValueNotifier(false);
   String? url;
   late StreamBloc _streamBloc;
   late CommentBloc _commentBloc;
+
   @override
   void initState() {
     _streamBloc = BlocProvider.of<StreamBloc>(context);
@@ -46,7 +52,8 @@ class _LiveScreenState extends State<LiveScreen> {
 
   Future<void> _getCamera() async {
     cameras = await availableCameras() ?? [];
-    _onNewCameraSelected(cameras.last);
+    _cameraDescription.value = true;
+    _onNewCameraSelected();
   }
 
   @override
@@ -54,15 +61,17 @@ class _LiveScreenState extends State<LiveScreen> {
     _cameraController?.dispose();
     _streamTitleController.dispose();
     _commentController.dispose();
+    _resolutionValue.dispose();
+    _cameraDescription.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: ()async {
-         await _stopStream();
-         return true;
+      onWillPop: () async {
+        await _stopStream();
+        return true;
       },
       child: Scaffold(
         resizeToAvoidBottomInset: false,
@@ -77,7 +86,8 @@ class _LiveScreenState extends State<LiveScreen> {
                               child: LoadingWidget(),
                             )
                           : AspectRatio(
-                              aspectRatio: _cameraController!.value.aspectRatio!,
+                              aspectRatio:
+                                  _cameraController!.value.aspectRatio!,
                               child: CameraPreview(_cameraController!),
                             ))
                 ],
@@ -116,15 +126,61 @@ class _LiveScreenState extends State<LiveScreen> {
                         }
                       },
                     ),
-                    InkWell(
-                      onTap: () async {
-                        Navigator.pop(context);
-                      },
-                      child: Icon(
-                        Icons.clear,
-                        color: AppColor.secondColor,
-                        size: 30.w,
-                      ),
+                    Row(
+                      children: [
+                        IconButton(
+                          onPressed: _onChangeCamera,
+                          icon: SvgPicture.asset(
+                            IconConstants.refreshIcon,
+                            color: AppColor.secondColor,
+                            width: 30.w,
+                            height: 30.w,
+                          ),
+                        ),
+                        SizedBox(
+                          width: 10.w,
+                        ),
+                        InkWell(
+                          onTap: _showBottomSheetChangeResolution,
+                          child: Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(20),
+                              ),
+                              border: Border.all(
+                                color: AppColor.secondColor,
+                                width: 1,
+                              ),
+                            ),
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 10.w, vertical: 2.5.h),
+                            child: ValueListenableBuilder<ResolutionPreset>(
+                              valueListenable: _resolutionValue,
+                              builder: (context, value, _) {
+                                return Text(
+                                  value.label,
+                                  style: ThemeText.subhead
+                                      .copyWith(color: AppColor.secondColor),
+                                );
+                              },
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          width: 10.w,
+                        ),
+                        InkWell(
+                          onTap: () async {
+                            await _stopStream();
+                            Navigator.pop(context);
+                          },
+                          child: Icon(
+                            Icons.clear,
+                            color: AppColor.secondColor,
+                            size: 30.w,
+                          ),
+                        ),
+                      ],
                     )
                   ],
                 ),
@@ -134,7 +190,8 @@ class _LiveScreenState extends State<LiveScreen> {
                 listener: (context, state) {
                   if (state.status == StreamStatus.streaming &&
                       state.streamModel != null) {
-                    _onVideoStreaming(state.streamModel!.streamKey).then((value) {
+                    _onVideoStreaming(state.streamModel!.streamKey)
+                        .then((value) {
                       if (mounted) setState(() {});
                       Wakelock.enable();
                     });
@@ -223,7 +280,8 @@ class _LiveScreenState extends State<LiveScreen> {
                                 SizedBox(
                                   height:
                                       MediaQuery.of(context).size.height * 0.3,
-                                  child: CommentWidget(comments: state.comments),
+                                  child:
+                                      CommentWidget(comments: state.comments),
                                 ),
                                 TextFieldWidget(
                                   controller: _commentController,
@@ -261,6 +319,27 @@ class _LiveScreenState extends State<LiveScreen> {
         ),
       ),
     );
+  }
+  void _onChangeCamera(){
+    _cameraDescription.value = !_cameraDescription.value;
+    _onNewCameraSelected();
+  }
+
+  void _showBottomSheetChangeResolution() {
+    showModalBottomSheet(
+        context: context,
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(20), topRight: Radius.circular(20))),
+        builder: (_) => ChangeResolutionWidget(
+            onChange: _onChangeResolution,
+            currentResolution: _resolutionValue.value));
+  }
+
+  void _onChangeResolution(ResolutionPreset resolution) {
+    _resolutionValue.value = resolution;
+    _onNewCameraSelected();
+    Navigator.pop(context);
   }
 
   void _sendComment() {
@@ -321,12 +400,14 @@ class _LiveScreenState extends State<LiveScreen> {
     return url;
   }
 
-  void _onNewCameraSelected(CameraDescription? cameraDescription) async {
+  void _onNewCameraSelected() async {
     if (_cameraController != null) {
       await _cameraController!.dispose();
     }
+    final cameraDescription =
+        _cameraDescription.value ? cameras.last : cameras.first;
     _cameraController = CameraController(
-      cameraDescription!,
+      cameraDescription,
       ResolutionPreset.veryHigh,
       enableAudio: true,
       androidUseOpenGL: true,
