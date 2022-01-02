@@ -8,6 +8,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:live_tv/bloc/comment_bloc/comment_bloc.dart';
 import 'package:live_tv/bloc/comment_bloc/comment_state.dart';
+import 'package:live_tv/bloc/reaction_bloc/reaction_bloc.dart';
+import 'package:live_tv/bloc/reaction_bloc/reaction_state.dart';
 import 'package:live_tv/bloc/stream_bloc/stream_bloc.dart';
 import 'package:live_tv/bloc/stream_bloc/stream_state.dart';
 import 'package:live_tv/common/config/configuration.dart';
@@ -15,6 +17,7 @@ import 'package:live_tv/common/constants/icon_constants.dart';
 import 'package:live_tv/common/constants/layout_constants.dart';
 import 'package:live_tv/common/extensions/resolution_preset_extensions.dart';
 import 'package:live_tv/view/live/widget/change_resolution_widget.dart';
+import 'package:live_tv/view/live/widget/reaction_widget.dart';
 import 'package:live_tv/view/theme/theme_color.dart';
 import 'package:live_tv/view/theme/theme_text.dart';
 import 'package:live_tv/view/widget/button_widget/label_button_widget.dart';
@@ -41,11 +44,13 @@ class _LiveScreenState extends State<LiveScreen> {
   String? url;
   late StreamBloc _streamBloc;
   late CommentBloc _commentBloc;
+  late ReactionBloc _reactionBloc;
 
   @override
   void initState() {
     _streamBloc = BlocProvider.of<StreamBloc>(context);
     _commentBloc = BlocProvider.of<CommentBloc>(context);
+    _reactionBloc = BlocProvider.of<ReactionBloc>(context);
     _getCamera().then((value) => null);
     super.initState();
   }
@@ -195,6 +200,7 @@ class _LiveScreenState extends State<LiveScreen> {
                       if (mounted) setState(() {});
                       Wakelock.enable();
                     });
+                    _reactionBloc.getReaction(state.streamModel!.id);
                     _commentBloc.getComment(state.streamModel!.id);
                   }
                 },
@@ -240,6 +246,9 @@ class _LiveScreenState extends State<LiveScreen> {
                               height: 50.h,
                               width: double.infinity,
                               child: LabelButtonWidget(
+                                  color: state.isValid
+                                      ? AppColor.primaryColor
+                                      : AppColor.disableColor,
                                   onPressed: _cameraController != null &&
                                           _cameraController!
                                               .value.isInitialized! &&
@@ -283,6 +292,15 @@ class _LiveScreenState extends State<LiveScreen> {
                                   child:
                                       CommentWidget(comments: state.comments),
                                 ),
+                                Padding(
+                                  padding: EdgeInsets.symmetric(vertical: 10.h),
+                                  child:
+                                      BlocBuilder<ReactionBloc, ReactionState>(
+                                          builder: (context, state) {
+                                    return ReactionWidget(
+                                        reactionMap: state.reactionMap);
+                                  }),
+                                ),
                                 TextFieldWidget(
                                   controller: _commentController,
                                   hintText: 'Comment',
@@ -290,7 +308,7 @@ class _LiveScreenState extends State<LiveScreen> {
                                     color: AppColor.secondColor,
                                   ),
                                   onSubmitted: _commentSubmit,
-                                  borderColor: AppColor.primaryColor,
+                                  borderColor: AppColor.secondColor,
                                   suffixIcon: IconButton(
                                     icon: Container(
                                       decoration:
@@ -299,7 +317,7 @@ class _LiveScreenState extends State<LiveScreen> {
                                         IconConstants.sendIcon,
                                         width: 20.w,
                                         height: 20.w,
-                                        color: AppColor.primaryColor,
+                                        color: AppColor.secondColor,
                                       ),
                                     ),
                                     onPressed: _sendComment,
@@ -320,7 +338,8 @@ class _LiveScreenState extends State<LiveScreen> {
       ),
     );
   }
-  void _onChangeCamera(){
+
+  void _onChangeCamera() {
     _cameraDescription.value = !_cameraDescription.value;
     _onNewCameraSelected();
   }

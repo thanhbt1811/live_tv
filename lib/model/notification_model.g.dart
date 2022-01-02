@@ -14,6 +14,7 @@ NotificationModel _$NotificationModelFromJson(Map<String, dynamic> json) {
     content: json['content'] as String,
     liveStreamId: json['livestreamId'] as int?,
     triggeredUserId: json['triggeredUserId'] as int?,
+    isRead: json['isRead'] as bool,
   );
 }
 
@@ -25,4 +26,5 @@ Map<String, dynamic> _$NotificationModelToJson(NotificationModel instance) =>
       'content': instance.content,
       'livestreamId': instance.liveStreamId,
       'triggeredUserId': instance.triggeredUserId,
+      'isRead': instance.isRead,
     };

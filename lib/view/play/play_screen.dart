@@ -7,8 +7,11 @@ import 'package:live_tv/bloc/comment_bloc/comment_bloc.dart';
 import 'package:live_tv/bloc/comment_bloc/comment_state.dart';
 import 'package:live_tv/bloc/play_stream_bloc/play_stream_bloc.dart';
 import 'package:live_tv/bloc/play_stream_bloc/play_stream_state.dart';
+import 'package:live_tv/bloc/reaction_bloc/reaction_bloc.dart';
 import 'package:live_tv/common/constants/icon_constants.dart';
 import 'package:live_tv/common/constants/layout_constants.dart';
+import 'package:live_tv/common/enum/reaction.dart';
+import 'package:live_tv/view/play/widget/reaction_button.dart';
 import 'package:live_tv/view/theme/theme_color.dart';
 import 'package:live_tv/view/theme/theme_text.dart';
 import 'package:live_tv/view/widget/comment_widget/comment_widget.dart';
@@ -31,10 +34,13 @@ class _PlayScreenState extends State<PlayScreen> {
   final TextEditingController _commentController = TextEditingController();
   late PlayStreamBloc _streamBloc;
   late CommentBloc _commentBloc;
+  late ReactionBloc _reactionBloc;
+
   @override
   void initState() {
     _streamBloc = BlocProvider.of<PlayStreamBloc>(context);
     _commentBloc = BlocProvider.of<CommentBloc>(context);
+    _reactionBloc = BlocProvider.of<ReactionBloc>(context);
     _streamUrl = widget.streamUrl;
     _player.initState();
     _play();
@@ -138,6 +144,12 @@ class _PlayScreenState extends State<PlayScreen> {
                                     MediaQuery.of(context).size.height * 0.3,
                                 child: CommentWidget(comments: state.comments),
                               ),
+                              Padding(
+                                padding: EdgeInsets.symmetric(vertical: 10.h),
+                                child: ReactionButton(
+                                  onTap: _reaction,
+                                ),
+                              ),
                               TextFieldWidget(
                                 controller: _commentController,
                                 hintText: 'Comment',
@@ -173,6 +185,10 @@ class _PlayScreenState extends State<PlayScreen> {
         )),
       ),
     );
+  }
+
+  void _reaction(Reaction reaction) {
+    _reactionBloc.reaction(reaction.label);
   }
 
   void _sendComment() {

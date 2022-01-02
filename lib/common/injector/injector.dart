@@ -8,6 +8,7 @@ import 'package:live_tv/bloc/loader_bloc/loader_bloc.dart';
 import 'package:live_tv/bloc/notification_bloc/notification_bloc.dart';
 import 'package:live_tv/bloc/play_stream_bloc/play_stream_bloc.dart';
 import 'package:live_tv/bloc/profile_bloc/profile_bloc.dart';
+import 'package:live_tv/bloc/reaction_bloc/reaction_bloc.dart';
 import 'package:live_tv/bloc/sign_in_bloc/sign_in_bloc.dart';
 import 'package:live_tv/bloc/sign_up_bloc/sign_up_bloc.dart';
 import 'package:live_tv/bloc/snackbar_bloc/snackbar_bloc.dart';
@@ -58,6 +59,7 @@ abstract class Injector {
   @Register.factory(CommentBloc)
   @Register.factory(FollowBloc)
   @Register.factory(NotificationBloc)
+  @Register.factory(ReactionBloc)
   void _configureBloc();
   //-----Configure Services-----//
   @Register.factory(AuthenticationServices)

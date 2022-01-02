@@ -32,7 +32,8 @@ class _$Injector extends Injector {
       ..registerFactory((c) => FollowBloc(userServices: c<UserServices>()))
       ..registerFactory((c) => NotificationBloc(
           notificationServices: c<NotificationServices>(),
-          userServices: c<UserServices>()));
+          userServices: c<UserServices>()))
+      ..registerFactory((c) => ReactionBloc(c<StreamServices>()));
   }
 
   @override

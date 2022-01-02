@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:live_tv/bloc/comment_bloc/comment_bloc.dart';
 import 'package:live_tv/bloc/play_stream_bloc/play_stream_bloc.dart';
+import 'package:live_tv/bloc/reaction_bloc/reaction_bloc.dart';
 import 'package:live_tv/bloc/sign_in_bloc/sign_in_bloc.dart';
 import 'package:live_tv/bloc/sign_up_bloc/sign_up_bloc.dart';
 import 'package:live_tv/bloc/stream_bloc/stream_bloc.dart';
@@ -47,7 +48,8 @@ class Routes {
               ),
               BlocProvider(
                 create: (_) => Injector.resolve<CommentBloc>(),
-              )
+              ),
+              BlocProvider(create: (_) => Injector.resolve<ReactionBloc>())
             ],
             child: LiveScreen(),
           ),
@@ -55,22 +57,26 @@ class Routes {
       case RouteList.play:
         {
           final args = settings.arguments as Map<String, dynamic>;
-          final stream = args[ArgumentConstants.steamModelKey] as StreamModel;
+          final streamId = args[ArgumentConstants.steamIdKey] as int;
+          final streamKey = args[ArgumentConstants.streamKey];
           return MaterialPageRoute(
               builder: (context) => MultiBlocProvider(
                       providers: [
                         BlocProvider(
                           create: (_) => Injector.resolve<CommentBloc>()
-                            ..getComment(stream.id),
+                            ..getComment(streamId),
                         ),
                         BlocProvider(
                           create: (_) => Injector.resolve<PlayStreamBloc>()
-                            ..initial(stream),
+                            ..initial(streamId),
+                        ),
+                        BlocProvider(
+                          create: (_) => Injector.resolve<ReactionBloc>()
+                            ..getReaction(streamId),
                         ),
                       ],
                       child: PlayScreen(
-                        streamUrl:
-                            '${Configuration.streamHost}/${stream.streamKey}',
+                        streamUrl: '${Configuration.streamHost}/$streamKey',
                       )));
         }
       default:

@@ -17,14 +17,16 @@ class NotificationModel extends Equatable {
   final int? liveStreamId;
   @JsonKey(name: 'triggeredUserId')
   final int? triggeredUserId;
-
+  @JsonKey(name: 'isRead')
+  final bool isRead;
   NotificationModel(
       {required this.id,
       required this.createAt,
       required this.updateAt,
       required this.content,
       required this.liveStreamId,
-      required this.triggeredUserId});
+      required this.triggeredUserId,
+      required this.isRead});
 
   factory NotificationModel.fromJson(Map<String, dynamic> json) =>
       _$NotificationModelFromJson(json);

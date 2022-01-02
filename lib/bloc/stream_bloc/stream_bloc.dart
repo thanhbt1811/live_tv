@@ -37,10 +37,7 @@ class StreamBloc extends Cubit<StreamState> {
     );
     emit(state.copyWith(
         status: StreamStatus.streaming, streamModel: streamModel));
-  }
-
-  Future<void> getViewCount(int id) async {
-    stompServices.subscribeViewCount(id, (viewCount) {
+    stompServices.subscribeViewCount(streamModel.id, (viewCount) {
       emit(state.copyWith(viewCount: viewCount));
     });
   }

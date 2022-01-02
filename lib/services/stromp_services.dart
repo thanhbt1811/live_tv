@@ -45,7 +45,7 @@ class StompServices {
 
   void subscribeViewCount(int id, Function(int) callBack) {
     client.subscribe(
-        destination: ' /topic/livestreams/$id/views-count',
+        destination: '/topic/livestreams/$id/views-count',
         callback: (frame) {
           log('viewCountSubscribe');
           log('viewCountSubscribe-frame: ${frame.body}');
@@ -71,7 +71,6 @@ class StompServices {
         callback: (frame) {
           log('streamEndSubscribe');
           log('streamEndSubscribe-frame: ${frame.body}');
-          final result = json.decode(frame.body!);
           callBack(0);
         });
   }

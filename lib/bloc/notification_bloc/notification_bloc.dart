@@ -52,4 +52,15 @@ class NotificationBloc extends Cubit<NotificationState> {
       );
     });
   }
+
+  Future<void> readNotification(int id) async {
+    emit(
+      state.copyWith(status: NotificationStatus.loading),
+    );
+    final sharePref = await SharedPreferences.getInstance();
+    final accessToken = sharePref.getString(KeyConstnants.accessToken);
+    await notificationServices.readNotification(
+        Configuration.getBearerAuth(accessToken ?? ''), id);
+    getNotification();
+  }
 }

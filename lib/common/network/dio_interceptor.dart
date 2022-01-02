@@ -27,6 +27,7 @@ class DioInterceptor extends Interceptor {
 
   @override
   void onError(DioError err, ErrorInterceptorHandler handler) {
+    _loaderBloc.finishLoading();
     _dio.lock();
     if (err.response?.data != null) {
       var errorModel;
@@ -37,7 +38,6 @@ class DioInterceptor extends Interceptor {
       }
       _snackbarBloc.add(ShowSnackbar(
           type: SnackBarType.error, translationKey: errorModel.message));
-      _loaderBloc.finishLoading();
     }
     _dio.unlock();
   }

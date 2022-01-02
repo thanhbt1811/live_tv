@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:live_tv/bloc/follow_bloc/follow_state.dart';
 import 'package:live_tv/bloc/notification_bloc/notification_bloc.dart';
 import 'package:live_tv/bloc/notification_bloc/notification_state.dart';
 import 'package:live_tv/common/constants/layout_constants.dart';
-import 'package:live_tv/view/notification/notification_item_widget.dart';
+import 'package:live_tv/model/notification_model.dart';
+import 'package:live_tv/view/notification/widget/notification_item_widget.dart';
 import 'package:live_tv/view/theme/theme_color.dart';
 import 'package:live_tv/view/widget/appbar_widget.dart';
 import 'package:live_tv/view/widget/loading_widget/loading_widget.dart';
@@ -61,6 +61,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                     itemBuilder: (_, index) {
                       final noti = state.notifications[index];
                       return NotificationItemWidget(
+                        onTap: () => _onTapNoti(noti),
                         notificationModel: noti,
                       );
                     },
@@ -82,5 +83,9 @@ class _NotificationScreenState extends State<NotificationScreen> {
 
   Future<void> _onRefresh() async {
     _notificationBloc.getNotification();
+  }
+
+  void _onTapNoti(NotificationModel noti) {
+    _notificationBloc.readNotification(noti.id);
   }
 }

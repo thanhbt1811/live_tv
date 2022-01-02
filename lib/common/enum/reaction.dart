@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:live_tv/common/constants/icon_constants.dart';
+import 'package:live_tv/common/constants/image_constants.dart';
 
 enum Reaction { like, love, haha, wow, sad, angry }
 
@@ -26,40 +25,40 @@ extension ReactionExtension on Reaction {
   Widget get icon {
     switch (this) {
       case Reaction.like:
-        return SvgPicture.asset(
-          IconConstants.likeIcon,
-          width: 15.w,
-          height: 15.w,
+        return Image.asset(
+          ImageConstants.likeIcon,
+          width: 25.w,
+          height: 25.w,
         );
       case Reaction.love:
-        return SvgPicture.asset(
-          IconConstants.loveIcon,
-          width: 15.w,
-          height: 15.w,
+        return Image.asset(
+          ImageConstants.loveIcon,
+          width: 25.w,
+          height: 25.w,
         );
       case Reaction.haha:
-        return SvgPicture.asset(
-          IconConstants.hahaIcon,
-          width: 15.w,
-          height: 15.w,
+        return Image.asset(
+          ImageConstants.hahaIcon,
+          width: 25.w,
+          height: 25.w,
         );
       case Reaction.wow:
-        return SvgPicture.asset(
-          IconConstants.wowIcon,
-          width: 15.w,
-          height: 15.w,
+        return Image.asset(
+          ImageConstants.wowIcon,
+          width: 25.w,
+          height: 25.w,
         );
       case Reaction.sad:
-        return SvgPicture.asset(
-          IconConstants.sadIcon,
-          width: 15.w,
-          height: 15.w,
+        return Image.asset(
+          ImageConstants.sadIcon,
+          width: 25.w,
+          height: 25.w,
         );
       case Reaction.angry:
-        return SvgPicture.asset(
-          IconConstants.angryIcon,
-          width: 15.w,
-          height: 15.w,
+        return Image.asset(
+          ImageConstants.angryIcon,
+          width: 25.w,
+          height: 25.w,
         );
     }
   }

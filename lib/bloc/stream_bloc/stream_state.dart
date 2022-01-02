@@ -16,15 +16,20 @@ class StreamState extends Equatable {
   final StreamModel? streamModel;
   final bool isValid;
   final int viewCount;
+  final DateTime updateAt;
 
   StreamState(
       {required this.status,
       required this.isValid,
       this.streamModel,
-      required this.viewCount});
+      required this.viewCount,
+      required this.updateAt});
 
-  factory StreamState.initial() =>
-      StreamState(status: StreamStatus.initial, isValid: false, viewCount: 0);
+  factory StreamState.initial() => StreamState(
+      status: StreamStatus.initial,
+      isValid: false,
+      viewCount: 0,
+      updateAt: DateTime.now());
 
   StreamState copyWith(
           {StreamStatus? status,
@@ -35,8 +40,10 @@ class StreamState extends Equatable {
           status: status ?? this.status,
           isValid: isValid ?? this.isValid,
           streamModel: streamModel ?? this.streamModel,
-          viewCount: viewCount ?? this.viewCount);
+          viewCount: viewCount ?? this.viewCount,
+          updateAt: DateTime.now());
 
   @override
-  List<Object?> get props => [status, isValid, streamModel, viewCount];
+  List<Object?> get props =>
+      [status, isValid, streamModel, viewCount, updateAt];
 }

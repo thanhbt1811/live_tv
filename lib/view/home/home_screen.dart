@@ -130,7 +130,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void _play(StreamModel stream) {
     Navigator.pushNamed(context, RouteList.play, arguments: {
-      ArgumentConstants.steamModelKey: stream,
+      ArgumentConstants.steamIdKey: stream.id,
+      ArgumentConstants.streamKey: stream.streamKey
     });
   }
 
