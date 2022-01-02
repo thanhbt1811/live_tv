@@ -1,0 +1,37 @@
+class IconConstants {
+  static const String _path = 'assets/icons';
+  static const String logo = '$_path/logo.svg';
+  static const String eyeOnIcon = '$_path/eye.svg';
+  static const String eyeOffIcon = '$_path/eye_off.svg';
+  static const String profileIcon = '$_path/ic_profile.svg';
+  static const String defaultAvatar = '$_path/default_avatar.svg';
+  static const String cameraIcon = '$_path/ic_camera.svg';
+  static const String circleCameraICon = '$_path/ic_circle_camera.svg';
+  static const String successIcon = '$_path/success.svg';
+  static const String snackBarFailedIcon = '$_path/snackbar_failed.svg';
+  static const String backIcon = '$_path/back_icon.svg';
+  static const String aboutIcon = '$_path/about_icon.svg';
+  static const String checkIcon = '$_path/check_icon.svg';
+  static const String closeIcon = '$_path/close_icon.svg';
+  static const String expandIcon = '$_path/expand_icon.svg';
+  static const String liveIcon = '$_path/live_icon.svg';
+  static const String lockIcon = '$_path/lock_icon.svg';
+  static const String logOutIcon = '$_path/logout_icon.svg';
+  static const String nextIcon = '$_path/next_icon.svg';
+  static const String sendIcon = '$_path/send_icon.svg';
+  static const String subscribeIcon = '$_path/subscribe_icon.svg';
+  static const String settingIcon = '$_path/setting_icon.svg';
+  static const String videoIcon = '$_path/video_icon.svg';
+  static const String backpackIcon = '$_path/backpack_icon.svg';
+  static const String refreshIcon = '$_path/refresh_icon.svg';
+  static const String speakerOnIcon = '$_path/speaker_on_icon.svg';
+  static const String speakerOffIcon = '$_path/speaker_off_icon.svg';
+  static const String angryIcon = '$_path/angry_icon.svg';
+  static const String hahaIcon = '$_path/haha_icon.svg';
+  static const String likeIcon = '$_path/like_icon.svg';
+  static const String loveIcon = '$_path/love_icon.svg';
+  static const String sadIcon = '$_path/sad_icon.svg';
+  static const String wowIcon = '$_path/wow_icon.svg';
+  static const String noDataIcon = '$_path/no_data_icon.svg';
+  static const String ringIcon = '$_path/ring_icon.svg';
+}
