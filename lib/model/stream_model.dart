@@ -14,8 +14,6 @@ class StreamModel extends Equatable {
   final String createAt;
   @JsonKey(name: 'updatedAt')
   final String updateAt;
-  @JsonKey(name: 'streamKey')
-  final String streamKey;
   @JsonKey(name: 'dvrFile')
   final String? dvrFile;
   @JsonKey(name: 'content')
@@ -32,7 +30,6 @@ class StreamModel extends Equatable {
       {required this.id,
       required this.createAt,
       required this.updateAt,
-      required this.streamKey,
       required this.dvrFile,
       required this.content,
       required this.comments,
@@ -44,15 +41,6 @@ class StreamModel extends Equatable {
   Map<String, dynamic> toJson() => _$StreamModelToJson(this);
 
   @override
-  List<Object?> get props => [
-        id,
-        createAt,
-        updateAt,
-        streamKey,
-        dvrFile,
-        content,
-        comments,
-        reactions,
-        user
-      ];
+  List<Object?> get props =>
+      [id, createAt, updateAt, dvrFile, content, comments, reactions, user];
 }

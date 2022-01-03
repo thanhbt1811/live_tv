@@ -1,7 +1,10 @@
 import 'dart:convert';
 import 'dart:developer';
 
+import 'package:live_tv/bloc/snackbar_bloc/bloc.dart';
+import 'package:live_tv/bloc/snackbar_bloc/snackbar_type.dart';
 import 'package:live_tv/common/config/configuration.dart';
+import 'package:live_tv/common/injector/injector.dart';
 import 'package:live_tv/model/comment_model.dart';
 import 'package:live_tv/model/notification_model.dart';
 import 'package:live_tv/model/reaction_model.dart';
@@ -13,7 +16,7 @@ class StompServices {
   StompClient? _stompClient;
 
   StompClient get client => _stompClient!;
-
+  final SnackbarBloc _snackbarBloc = Injector.resolve<SnackbarBloc>();
   static final StompServices instance = StompServices._initial();
 
   StompServices._initial() {
@@ -82,7 +85,11 @@ class StompServices {
           log('notificationSubscribe');
           log('notificationSubscribe-frame: ${frame.body}');
           final result = json.decode(frame.body!);
-          callBack(NotificationModel.fromJson(result));
+          final notification = NotificationModel.fromJson(result);
+          _snackbarBloc.add(ShowSnackbar(
+              type: SnackBarType.success,
+              translationKey: notification.content));
+          callBack(notification);
         });
   }
 }

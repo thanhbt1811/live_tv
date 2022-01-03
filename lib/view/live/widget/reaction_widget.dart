@@ -9,11 +9,12 @@ import 'package:live_tv/view/theme/theme_text.dart';
 
 class ReactionWidget extends StatelessWidget {
   final Map<String, List<ReactionModel>> reactionMap;
+  final Function(Reaction)? onTap;
 
-  const ReactionWidget({Key? key, required this.reactionMap}) : super(key: key);
+  const ReactionWidget({Key? key, required this.reactionMap, this.onTap})
+      : super(key: key);
   @override
   Widget build(BuildContext context) {
-    log('reactionMap : $reactionMap');
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -21,7 +22,10 @@ class ReactionWidget extends StatelessWidget {
         Reaction.values.length,
         (index) => Row(
           children: [
-            Reaction.values[index].icon,
+            InkWell(
+                onTap: () =>
+                    onTap != null ? onTap!(Reaction.values[index]) : null,
+                child: Reaction.values[index].icon),
             SizedBox(
               width: 5.w,
             ),

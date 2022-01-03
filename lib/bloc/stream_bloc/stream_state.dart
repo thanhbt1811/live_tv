@@ -8,7 +8,8 @@ enum StreamStatus {
   loading,
   success,
   failed,
-  streaming
+  streaming,
+  streamEnd
 }
 
 class StreamState extends Equatable {

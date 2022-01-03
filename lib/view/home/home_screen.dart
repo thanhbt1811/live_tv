@@ -9,6 +9,7 @@ import 'package:live_tv/common/constants/icon_constants.dart';
 import 'package:live_tv/common/constants/layout_constants.dart';
 import 'package:live_tv/common/constants/route_constants.dart';
 import 'package:live_tv/model/stream_model.dart';
+import 'package:live_tv/view/play/widget/give_star_widget.dart';
 import 'package:live_tv/view/theme/theme_color.dart';
 import 'package:live_tv/view/theme/theme_text.dart';
 import 'package:live_tv/view/widget/appbar_widget.dart';
@@ -113,7 +114,7 @@ class _HomeScreenState extends State<HomeScreen> {
         decoration:
             BoxDecoration(color: AppColor.primaryColor, shape: BoxShape.circle),
         child: IconButton(
-          onPressed: _onLive,
+          onPressed: _showModalBottomSheetSendStar,
           icon: Icon(
             Icons.video_camera_back_outlined,
             color: AppColor.secondColor,
@@ -131,11 +132,24 @@ class _HomeScreenState extends State<HomeScreen> {
   void _play(StreamModel stream) {
     Navigator.pushNamed(context, RouteList.play, arguments: {
       ArgumentConstants.steamIdKey: stream.id,
-      ArgumentConstants.streamKey: stream.streamKey
     });
   }
 
   Future<void> _onRefresh() async {
     _homeBloc.getStreaming();
+  }
+
+  void _showModalBottomSheetSendStar() {
+    showModalBottomSheet(
+        context: context,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(20),
+            topRight: Radius.circular(20),
+          ),
+        ),
+        builder: (_) {
+          return GiveStartWidget();
+        });
   }
 }

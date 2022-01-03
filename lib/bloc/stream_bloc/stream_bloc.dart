@@ -41,4 +41,19 @@ class StreamBloc extends Cubit<StreamState> {
       emit(state.copyWith(viewCount: viewCount));
     });
   }
+
+  Future<void> endStream() async {
+    emit(
+      state.copyWith(
+        status: StreamStatus.loading,
+      ),
+    );
+    final SharedPreferences preferences = await SharedPreferences.getInstance();
+    final accessToken = preferences.getString(KeyConstnants.accessToken);
+    await streamServices.endStream(
+        Configuration.getBearerAuth(accessToken ?? ''), state.streamModel!.id);
+    emit(
+      state.copyWith(status: StreamStatus.streamEnd),
+    );
+  }
 }

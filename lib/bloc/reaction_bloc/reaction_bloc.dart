@@ -26,19 +26,19 @@ class ReactionBloc extends Cubit<ReactionState> {
     emit(
       state.copyWith(status: ReactionStatus.loading),
     );
+    final sharePref = await SharedPreferences.getInstance();
+    final accessToken = sharePref.getString(KeyConstnants.accessToken);
+    final stream = await _streamServices.getLiveStream(
+        Configuration.getBearerAuth(accessToken ?? ''), id);
+    final Map<String, List<ReactionModel>> reactionMap =
+        _getReactionMap(stream.reactions ?? []);
+    emit(state.copyWith(reactionMap: reactionMap, reactions: stream.reactions));
     _stompServices.subscribeReaction(
       id,
       (comment) {
         final reactions = state.reactions..add(comment);
-        final Map<String, List<ReactionModel>> reactionMap = {};
-        for (final reaction in reactions) {
-          if (reactionMap[reaction.type] == null) {
-            reactionMap[reaction.type] = [reaction];
-          } else {
-            reactionMap[reaction.type]!.add(reaction);
-          }
-        }
-
+        final Map<String, List<ReactionModel>> reactionMap =
+            _getReactionMap(reactions);
         emit(
           state.copyWith(
               reactions: reactions,
@@ -47,5 +47,18 @@ class ReactionBloc extends Cubit<ReactionState> {
         );
       },
     );
+  }
+
+  Map<String, List<ReactionModel>> _getReactionMap(
+      List<ReactionModel> reactions) {
+    final Map<String, List<ReactionModel>> reactionMap = {};
+    for (final reaction in reactions) {
+      if (reactionMap[reaction.type] == null) {
+        reactionMap[reaction.type] = [reaction];
+      } else {
+        reactionMap[reaction.type]!.add(reaction);
+      }
+    }
+    return reactionMap;
   }
 }

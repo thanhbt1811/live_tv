@@ -11,7 +11,6 @@ StreamModel _$StreamModelFromJson(Map<String, dynamic> json) {
     id: json['id'] as int,
     createAt: json['createdAt'] as String,
     updateAt: json['updatedAt'] as String,
-    streamKey: json['streamKey'] as String,
     dvrFile: json['dvrFile'] as String?,
     content: json['content'] as String?,
     comments: (json['comments'] as List<dynamic>?)
@@ -30,7 +29,6 @@ Map<String, dynamic> _$StreamModelToJson(StreamModel instance) =>
       'id': instance.id,
       'createdAt': instance.createAt,
       'updatedAt': instance.updateAt,
-      'streamKey': instance.streamKey,
       'dvrFile': instance.dvrFile,
       'content': instance.content,
       'comments': instance.comments,

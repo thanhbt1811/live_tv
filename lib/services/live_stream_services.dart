@@ -51,4 +51,9 @@ abstract class StreamServices {
   Future<List<StreamModel>> getStreaming(
     @Header(Configuration.authentication) String accessToken,
   );
+  @PUT('api/v1/livestreams/{${ParameterConstants.id}}/end')
+  Future<StreamModel> endStream(
+    @Header(Configuration.authentication) String accessToken,
+    @Path() int id,
+  );
 }

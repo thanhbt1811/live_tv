@@ -17,6 +17,13 @@ class CommentBloc extends Cubit<CommentState> {
     emit(
       state.copyWith(status: CommentStatus.loading),
     );
+    final sharePref = await SharedPreferences.getInstance();
+    final accessToken = sharePref.getString(KeyConstnants.accessToken);
+    final stream = await streamServices.getLiveStream(
+        Configuration.getBearerAuth(accessToken ?? ''), id);
+    emit(
+      state.copyWith(comments: stream.comments),
+    );
     services.subscribeComment(
       id,
       (comment) {

@@ -10,7 +10,6 @@ import 'package:live_tv/common/config/configuration.dart';
 import 'package:live_tv/common/constants/argument_constants.dart';
 import 'package:live_tv/common/constants/route_constants.dart';
 import 'package:live_tv/common/injector/injector.dart';
-import 'package:live_tv/model/stream_model.dart';
 import 'package:live_tv/view/live/live_screen.dart';
 import 'package:live_tv/view/login/login_screen.dart';
 import 'package:live_tv/view/main/main_screen.dart';
@@ -58,7 +57,6 @@ class Routes {
         {
           final args = settings.arguments as Map<String, dynamic>;
           final streamId = args[ArgumentConstants.steamIdKey] as int;
-          final streamKey = args[ArgumentConstants.streamKey];
           return MaterialPageRoute(
               builder: (context) => MultiBlocProvider(
                       providers: [
@@ -76,7 +74,7 @@ class Routes {
                         ),
                       ],
                       child: PlayScreen(
-                        streamUrl: '${Configuration.streamHost}/$streamKey',
+                        streamUrl: '${Configuration.streamHost}/$streamId',
                       )));
         }
       default:

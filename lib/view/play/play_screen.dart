@@ -8,10 +8,11 @@ import 'package:live_tv/bloc/comment_bloc/comment_state.dart';
 import 'package:live_tv/bloc/play_stream_bloc/play_stream_bloc.dart';
 import 'package:live_tv/bloc/play_stream_bloc/play_stream_state.dart';
 import 'package:live_tv/bloc/reaction_bloc/reaction_bloc.dart';
+import 'package:live_tv/bloc/reaction_bloc/reaction_state.dart';
 import 'package:live_tv/common/constants/icon_constants.dart';
 import 'package:live_tv/common/constants/layout_constants.dart';
 import 'package:live_tv/common/enum/reaction.dart';
-import 'package:live_tv/view/play/widget/reaction_button.dart';
+import 'package:live_tv/view/live/widget/reaction_widget.dart';
 import 'package:live_tv/view/theme/theme_color.dart';
 import 'package:live_tv/view/theme/theme_text.dart';
 import 'package:live_tv/view/widget/comment_widget/comment_widget.dart';
@@ -50,6 +51,7 @@ class _PlayScreenState extends State<PlayScreen> {
   @override
   void dispose() {
     _commentController.dispose();
+    _player.dispose();
     super.dispose();
   }
 
@@ -77,6 +79,11 @@ class _PlayScreenState extends State<PlayScreen> {
               fit: FijkFit.fill,
               fsFit: FijkFit.fill,
               fs: false,
+            ),
+            Expanded(
+              child: Container(
+                color: AppColor.transparent,
+              ),
             ),
             Padding(
               padding: EdgeInsets.symmetric(
@@ -146,30 +153,62 @@ class _PlayScreenState extends State<PlayScreen> {
                               ),
                               Padding(
                                 padding: EdgeInsets.symmetric(vertical: 10.h),
-                                child: ReactionButton(
-                                  onTap: _reaction,
-                                ),
+                                child: BlocBuilder<ReactionBloc, ReactionState>(
+                                    builder: (context, state) {
+                                  return ReactionWidget(
+                                    reactionMap: state.reactionMap,
+                                    onTap: (reaction) =>
+                                        _reactionBloc.reaction(reaction.label),
+                                  );
+                                }),
                               ),
-                              TextFieldWidget(
-                                controller: _commentController,
-                                hintText: 'Comment',
-                                textStyle: ThemeText.subhead.copyWith(
-                                  color: AppColor.secondColor,
-                                ),
-                                onSubmitted: _commentSubmit,
-                                borderColor: AppColor.primaryColor,
-                                suffixIcon: IconButton(
-                                  icon: Container(
-                                    decoration:
-                                        BoxDecoration(shape: BoxShape.circle),
-                                    child: SvgPicture.asset(
-                                      IconConstants.sendIcon,
-                                      width: 20.w,
-                                      height: 20.w,
-                                      color: AppColor.primaryColor,
+                              SizedBox(
+                                height: 30.h,
+                                child: Row(
+                                  children: [
+                                    Expanded(
+                                      child: TextFieldWidget(
+                                        controller: _commentController,
+                                        hintText: 'Comment',
+                                        textStyle: ThemeText.subhead.copyWith(
+                                          color: AppColor.secondColor,
+                                        ),
+                                        onSubmitted: _commentSubmit,
+                                        borderColor: AppColor.secondColor,
+                                        suffixIcon: IconButton(
+                                          icon: Container(
+                                            decoration: BoxDecoration(
+                                                shape: BoxShape.circle),
+                                            child: SvgPicture.asset(
+                                                IconConstants.sendIcon,
+                                                width: 20.w,
+                                                height: 20.w,
+                                                color: AppColor.secondColor),
+                                          ),
+                                          onPressed: _sendComment,
+                                        ),
+                                      ),
                                     ),
-                                  ),
-                                  onPressed: _sendComment,
+                                    SizedBox(
+                                      width: 10.w,
+                                    ),
+                                    Container(
+                                      decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        border: Border.all(
+                                            color: AppColor.secondColor,
+                                            width: 1),
+                                      ),
+                                      child: Padding(
+                                        padding: EdgeInsets.all(5.w),
+                                        child: SvgPicture.asset(
+                                          IconConstants.starIcon,
+                                          width: 20.w,
+                                          height: 20.w,
+                                        ),
+                                      ),
+                                    )
+                                  ],
                                 ),
                               ),
                             ],

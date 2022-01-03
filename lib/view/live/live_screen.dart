@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:developer';
-
 import 'package:camera_with_rtmp/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -76,6 +75,7 @@ class _LiveScreenState extends State<LiveScreen> {
     return WillPopScope(
       onWillPop: () async {
         await _stopStream();
+        _streamBloc.endStream();
         return true;
       },
       child: Scaffold(
@@ -177,6 +177,7 @@ class _LiveScreenState extends State<LiveScreen> {
                         InkWell(
                           onTap: () async {
                             await _stopStream();
+                            _streamBloc.endStream();
                             Navigator.pop(context);
                           },
                           child: Icon(
@@ -195,8 +196,7 @@ class _LiveScreenState extends State<LiveScreen> {
                 listener: (context, state) {
                   if (state.status == StreamStatus.streaming &&
                       state.streamModel != null) {
-                    _onVideoStreaming(state.streamModel!.streamKey)
-                        .then((value) {
+                    _onVideoStreaming('${state.streamModel!.id}').then((value) {
                       if (mounted) setState(() {});
                       Wakelock.enable();
                     });

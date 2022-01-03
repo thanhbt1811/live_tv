@@ -34,4 +34,5 @@ class IconConstants {
   static const String wowIcon = '$_path/wow_icon.svg';
   static const String noDataIcon = '$_path/no_data_icon.svg';
   static const String ringIcon = '$_path/ring_icon.svg';
+  static const String starIcon = '$_path/star_icon.svg';
 }

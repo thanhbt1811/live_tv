@@ -67,7 +67,11 @@ class _MainScreenState extends State<MainScreen>
           tabs: List.generate(_bottomNaviTypeLength, (index) {
             return Tab(
               iconMargin: EdgeInsets.only(bottom: 4.h),
-              icon: Center(child: BottomNaviType.values[index].icon),
+              icon: Center(
+                child: BottomNaviType.values[index].icon(
+                  BottomNaviType.values[_tabController.index],
+                ),
+              ),
             );
           }),
           onTap: (index) {

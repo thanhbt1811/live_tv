@@ -18,31 +18,39 @@ import 'package:live_tv/view/theme/theme_color.dart';
 enum BottomNaviType { home, follow, notification, profile }
 
 extension BottomNaviTypeExtension on BottomNaviType {
-  Widget get icon {
+  Widget icon(BottomNaviType currentType) {
     switch (this) {
       case BottomNaviType.home:
         return Icon(
           Icons.home_outlined,
-          color: AppColor.black,
+          color: currentType == BottomNaviType.home
+              ? AppColor.primaryColor
+              : AppColor.black,
           size: 18.w,
         );
       case BottomNaviType.follow:
         return Icon(
           Icons.favorite_outline,
-          color: AppColor.black,
+          color: currentType == BottomNaviType.follow
+              ? AppColor.primaryColor
+              : AppColor.black,
           size: 18.w,
         );
       case BottomNaviType.notification:
         return SvgPicture.asset(
           IconConstants.ringIcon,
-          color: AppColor.black,
+          color: currentType == BottomNaviType.notification
+              ? AppColor.primaryColor
+              : AppColor.black,
           width: 18.w,
           height: 18.w,
         );
       case BottomNaviType.profile:
         return SvgPicture.asset(
           IconConstants.profileIcon,
-          color: AppColor.black,
+          color: currentType == BottomNaviType.profile
+              ? AppColor.primaryColor
+              : AppColor.black,
           width: 18.w,
           height: 18.w,
         );
