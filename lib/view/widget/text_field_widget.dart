@@ -66,6 +66,7 @@ class TextFieldWidget extends StatelessWidget {
         obscureText: obscureText,
         initialValue: initialText,
         validator: validator,
+        keyboardType: keyboardType,
         style: textStyle,
         decoration: InputDecoration(
           labelText: labelText,

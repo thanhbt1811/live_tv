@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:kiwi/kiwi.dart';
 import 'package:live_tv/bloc/comment_bloc/comment_bloc.dart';
 import 'package:live_tv/bloc/follow_bloc/follow_bloc.dart';
+import 'package:live_tv/bloc/give_star_bloc/give_star_bloc.dart';
 import 'package:live_tv/bloc/home_bloc/home_bloc.dart';
 import 'package:live_tv/bloc/language_bloc/language_bloc.dart';
 import 'package:live_tv/bloc/loader_bloc/loader_bloc.dart';
@@ -60,6 +61,7 @@ abstract class Injector {
   @Register.factory(FollowBloc)
   @Register.factory(NotificationBloc)
   @Register.factory(ReactionBloc)
+  @Register.factory(GiveStarBloc)
   void _configureBloc();
   //-----Configure Services-----//
   @Register.factory(AuthenticationServices)

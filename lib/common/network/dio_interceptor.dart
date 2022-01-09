@@ -16,12 +16,14 @@ class DioInterceptor extends Interceptor {
   @override
   void onResponse(Response response, ResponseInterceptorHandler handler) {
     log('DIO-Response-Data: ${response.data}');
-    if (response.statusCode == 201) {
-      if (response.data.runtimeType == String) {
-        final responseData = json.decode(response.data);
-        response.data = responseData['accessToken'];
-      }
-    }
+    // if (response.statusCode == 201) {
+    //   if (response.data.runtimeType == String) {
+    //     final responseData = json.decode(response.data);
+    //     if (responseData['accessToken'] != null) {
+    //       response.data = responseData['accessToken'];
+    //     }
+    //   }
+    // }
     return super.onResponse(response, handler);
   }
 

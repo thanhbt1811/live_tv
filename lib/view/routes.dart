@@ -75,6 +75,7 @@ class Routes {
                       ],
                       child: PlayScreen(
                         streamUrl: '${Configuration.streamHost}/$streamId',
+                        streamId: streamId,
                       )));
         }
       default:

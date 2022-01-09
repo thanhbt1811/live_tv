@@ -13,6 +13,7 @@ CommentModel _$CommentModelFromJson(Map<String, dynamic> json) {
     updateAt: json['updatedAt'] as String,
     content: json['content'] as String,
     user: UserModel.fromJson(json['user'] as Map<String, dynamic>),
+    stars: json['stars'] as int?,
   );
 }
 
@@ -23,4 +24,5 @@ Map<String, dynamic> _$CommentModelToJson(CommentModel instance) =>
       'updatedAt': instance.updateAt,
       'content': instance.content,
       'user': instance.user,
+      'stars': instance.stars,
     };

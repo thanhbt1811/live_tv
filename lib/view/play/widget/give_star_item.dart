@@ -8,7 +8,7 @@ import 'package:live_tv/view/theme/theme_text.dart';
 
 class GiveStarItem extends StatelessWidget {
   final GiveStar star;
-  final GiveStar currentStar;
+  final GiveStar? currentStar;
   final Function(GiveStar) onTap;
 
   const GiveStarItem(

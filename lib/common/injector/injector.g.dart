@@ -33,7 +33,9 @@ class _$Injector extends Injector {
       ..registerFactory((c) => NotificationBloc(
           notificationServices: c<NotificationServices>(),
           userServices: c<UserServices>()))
-      ..registerFactory((c) => ReactionBloc(c<StreamServices>()));
+      ..registerFactory((c) => ReactionBloc(c<StreamServices>()))
+      ..registerFactory(
+          (c) => GiveStarBloc(c<StreamServices>(), c<SnackbarBloc>()));
   }
 
   @override

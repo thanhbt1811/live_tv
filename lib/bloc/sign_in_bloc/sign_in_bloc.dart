@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:developer';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -24,9 +25,11 @@ class SignInBloc extends Cubit<SignInState> {
     loaderBloc.startLoading();
     emit(state.update(status: SignInStatus.loading));
     final response = await authenticationServices.signIn(model.toJson());
-    log('signIn response: $response');
+    final accessTokenMap = json.decode(response);
+    log('signIn response: ${accessTokenMap['accessToken']}');
     final sharePref = await SharedPreferences.getInstance();
-    sharePref.setString(KeyConstnants.accessToken, response);
+    sharePref.setString(
+        KeyConstnants.accessToken, accessTokenMap['accessToken']);
     loaderBloc.finishLoading();
     emit(state.update(status: SignInStatus.success));
   }

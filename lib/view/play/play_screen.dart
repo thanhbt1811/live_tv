@@ -5,6 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:live_tv/bloc/comment_bloc/comment_bloc.dart';
 import 'package:live_tv/bloc/comment_bloc/comment_state.dart';
+import 'package:live_tv/bloc/give_star_bloc/give_star_bloc.dart';
 import 'package:live_tv/bloc/play_stream_bloc/play_stream_bloc.dart';
 import 'package:live_tv/bloc/play_stream_bloc/play_stream_state.dart';
 import 'package:live_tv/bloc/reaction_bloc/reaction_bloc.dart';
@@ -12,7 +13,9 @@ import 'package:live_tv/bloc/reaction_bloc/reaction_state.dart';
 import 'package:live_tv/common/constants/icon_constants.dart';
 import 'package:live_tv/common/constants/layout_constants.dart';
 import 'package:live_tv/common/enum/reaction.dart';
+import 'package:live_tv/common/injector/injector.dart';
 import 'package:live_tv/view/live/widget/reaction_widget.dart';
+import 'package:live_tv/view/play/widget/give_star_widget.dart';
 import 'package:live_tv/view/theme/theme_color.dart';
 import 'package:live_tv/view/theme/theme_text.dart';
 import 'package:live_tv/view/widget/comment_widget/comment_widget.dart';
@@ -22,8 +25,13 @@ import 'package:live_tv/view/widget/text_field_widget.dart';
 
 class PlayScreen extends StatefulWidget {
   final String streamUrl;
+  final int streamId;
 
-  const PlayScreen({Key? key, required this.streamUrl}) : super(key: key);
+  const PlayScreen({
+    Key? key,
+    required this.streamUrl,
+    required this.streamId,
+  }) : super(key: key);
 
   @override
   State<PlayScreen> createState() => _PlayScreenState();
@@ -192,19 +200,22 @@ class _PlayScreenState extends State<PlayScreen> {
                                     SizedBox(
                                       width: 10.w,
                                     ),
-                                    Container(
-                                      decoration: BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        border: Border.all(
-                                            color: AppColor.secondColor,
-                                            width: 1),
-                                      ),
-                                      child: Padding(
-                                        padding: EdgeInsets.all(5.w),
-                                        child: SvgPicture.asset(
-                                          IconConstants.starIcon,
-                                          width: 20.w,
-                                          height: 20.w,
+                                    InkWell(
+                                      onTap: _giveStars,
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          border: Border.all(
+                                              color: AppColor.secondColor,
+                                              width: 1),
+                                        ),
+                                        child: Padding(
+                                          padding: EdgeInsets.all(5.w),
+                                          child: SvgPicture.asset(
+                                            IconConstants.starIcon,
+                                            width: 20.w,
+                                            height: 20.w,
+                                          ),
                                         ),
                                       ),
                                     )
@@ -226,10 +237,6 @@ class _PlayScreenState extends State<PlayScreen> {
     );
   }
 
-  void _reaction(Reaction reaction) {
-    _reactionBloc.reaction(reaction.label);
-  }
-
   void _sendComment() {
     _commentBloc.comment(_commentController.text);
     _commentController.clear();
@@ -238,5 +245,24 @@ class _PlayScreenState extends State<PlayScreen> {
   void _commentSubmit(String value) {
     _commentBloc.comment(value);
     _commentController.clear();
+  }
+
+  void _giveStars() {
+    showModalBottomSheet(
+        context: context,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(20),
+            topRight: Radius.circular(20),
+          ),
+        ),
+        builder: (_) {
+          return BlocProvider(
+            create: (_) => Injector.resolve<GiveStarBloc>(),
+            child: GiveStartWidget(
+              streamId: widget.streamId,
+            ),
+          );
+        });
   }
 }

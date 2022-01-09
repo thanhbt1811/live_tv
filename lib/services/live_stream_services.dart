@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:dio/dio.dart';
 import 'package:live_tv/common/config/configuration.dart';
 import 'package:live_tv/common/constants/parameter_constants.dart';
@@ -56,4 +58,9 @@ abstract class StreamServices {
     @Header(Configuration.authentication) String accessToken,
     @Path() int id,
   );
+  @POST('api/v1/livestreams/{${ParameterConstants.id}}/give-stars')
+  Future<String> giveStars(
+      @Header(Configuration.authentication) String accessToken,
+      @Path() int id,
+      @Body() Map<String, dynamic> map);
 }
