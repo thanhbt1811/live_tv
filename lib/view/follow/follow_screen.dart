@@ -3,7 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:live_tv/bloc/follow_bloc/follow_bloc.dart';
 import 'package:live_tv/bloc/follow_bloc/follow_state.dart';
+import 'package:live_tv/common/constants/argument_constants.dart';
 import 'package:live_tv/common/constants/layout_constants.dart';
+import 'package:live_tv/common/constants/route_constants.dart';
 import 'package:live_tv/model/user_model.dart';
 import 'package:live_tv/view/follow/widget/follow_item_widget.dart';
 import 'package:live_tv/view/theme/theme_color.dart';
@@ -55,15 +57,25 @@ class _FollowScreenState extends State<FollowScreen> {
                     shrinkWrap: true,
                     itemBuilder: (_, index) {
                       final user = state.users[index];
-                      return FollowItemWidget(
-                        user: user,
-                        onTap: () {
-                          if (user.followed) {
-                            _unFollow(user);
-                          } else {
-                            _follow(user);
-                          }
-                        },
+                      return InkWell(
+                        onTap: () => Navigator.pushNamed(
+                          context,
+                          RouteList.profile,
+                          arguments: {
+                            ArgumentConstants.user: user,
+                            ArgumentConstants.isMe: false
+                          },
+                        ),
+                        child: FollowItemWidget(
+                          user: user,
+                          onTap: () {
+                            if (user.followed) {
+                              _unFollow(user);
+                            } else {
+                              _follow(user);
+                            }
+                          },
+                        ),
                       );
                     },
                     separatorBuilder: (_, index) {
@@ -79,7 +91,10 @@ class _FollowScreenState extends State<FollowScreen> {
     );
   }
 
-  Future<void> _onRefresh() async {}
+  Future<void> _onRefresh() async {
+    _followBloc.getUser();
+  }
+
   void _follow(UserModel user) {
     _followBloc.follow(user.id);
   }

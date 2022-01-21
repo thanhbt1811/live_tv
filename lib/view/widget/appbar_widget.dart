@@ -41,7 +41,7 @@ class AppbarWidget extends StatelessWidget implements PreferredSizeWidget {
                     )),
                 Text(
                   title,
-                  style: ThemeText.headline.copyWith(
+                  style: ThemeText.display1.copyWith(
                       color: AppColor.black, fontWeight: FontWeight.bold),
                 )
               ],

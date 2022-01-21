@@ -3,7 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:live_tv/bloc/notification_bloc/notification_bloc.dart';
 import 'package:live_tv/bloc/notification_bloc/notification_state.dart';
+import 'package:live_tv/common/constants/argument_constants.dart';
 import 'package:live_tv/common/constants/layout_constants.dart';
+import 'package:live_tv/common/constants/route_constants.dart';
 import 'package:live_tv/model/notification_model.dart';
 import 'package:live_tv/view/notification/widget/notification_item_widget.dart';
 import 'package:live_tv/view/theme/theme_color.dart';
@@ -29,7 +31,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppbarWidget(
-        title: 'Notification',
+        title: 'NOTIFICATION',
         isLeading: false,
       ),
       body: Padding(
@@ -87,5 +89,8 @@ class _NotificationScreenState extends State<NotificationScreen> {
 
   void _onTapNoti(NotificationModel noti) {
     _notificationBloc.readNotification(noti.id);
+    Navigator.pushNamed(context, RouteList.play, arguments: {
+      ArgumentConstants.steamIdKey: noti.liveStreamId,
+    });
   }
 }

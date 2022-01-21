@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:live_tv/bloc/comment_bloc/comment_bloc.dart';
 import 'package:live_tv/bloc/play_stream_bloc/play_stream_bloc.dart';
+import 'package:live_tv/bloc/profile_bloc/profile_bloc.dart';
 import 'package:live_tv/bloc/reaction_bloc/reaction_bloc.dart';
 import 'package:live_tv/bloc/sign_in_bloc/sign_in_bloc.dart';
 import 'package:live_tv/bloc/sign_up_bloc/sign_up_bloc.dart';
@@ -10,9 +11,11 @@ import 'package:live_tv/common/config/configuration.dart';
 import 'package:live_tv/common/constants/argument_constants.dart';
 import 'package:live_tv/common/constants/route_constants.dart';
 import 'package:live_tv/common/injector/injector.dart';
+import 'package:live_tv/model/user_model.dart';
 import 'package:live_tv/view/live/live_screen.dart';
 import 'package:live_tv/view/login/login_screen.dart';
 import 'package:live_tv/view/main/main_screen.dart';
+import 'package:live_tv/view/my_account/profile/profile_screen.dart';
 import 'package:live_tv/view/play/play_screen.dart';
 import 'package:live_tv/view/register/register_screen.dart';
 import 'package:live_tv/view/splash/splash_screen.dart';
@@ -77,6 +80,22 @@ class Routes {
                         streamUrl: '${Configuration.streamHost}/$streamId',
                         streamId: streamId,
                       )));
+        }
+      case RouteList.profile:
+        {
+          final args = settings.arguments as Map<String, dynamic>;
+          final user = args[ArgumentConstants.user] as UserModel;
+          final isMe = args[ArgumentConstants.isMe] ?? false;
+
+          return MaterialPageRoute(
+            builder: (_) => BlocProvider<ProfileBloc>(
+              create: (_) => Injector.resolve<ProfileBloc>(),
+              child: ProfileScreen(
+                user: user,
+                isMe: isMe,
+              ),
+            ),
+          );
         }
       default:
         _emptyRoute(settings);

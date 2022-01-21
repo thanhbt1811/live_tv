@@ -4,9 +4,11 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:live_tv/bloc/profile_bloc/profile_bloc.dart';
 import 'package:live_tv/bloc/profile_bloc/profile_state.dart';
+import 'package:live_tv/common/constants/argument_constants.dart';
 import 'package:live_tv/common/constants/icon_constants.dart';
 import 'package:live_tv/common/constants/route_constants.dart';
 import 'package:live_tv/model/stream_model.dart';
+import 'package:live_tv/model/user_model.dart';
 import 'package:live_tv/view/my_account/widget/avatar_appbar_widget.dart';
 import 'package:live_tv/view/theme/theme_color.dart';
 import 'package:live_tv/view/theme/theme_text.dart';
@@ -49,7 +51,7 @@ class _MyAccountScreenState extends State<MyAccountScreen> {
                     return AvatarAppbarWidget(
                         user: state.user!,
                         logOut: _logOut,
-                        viewProfile: _viewProfile);
+                        viewProfile: () => _viewProfile(state.user!));
                   } else {
                     return LoadingWidget();
                   }
@@ -123,8 +125,11 @@ class _MyAccountScreenState extends State<MyAccountScreen> {
     _profileBloc.logOut();
   }
 
-  void _viewProfile() {
-    Navigator.pushNamed(context, RouteList.profile);
+  void _viewProfile(UserModel user) {
+    Navigator.pushNamed(context, RouteList.profile, arguments: {
+      ArgumentConstants.user: user,
+      ArgumentConstants.isMe: true
+    });
   }
 
   Future<void> _onRefresh() async {
