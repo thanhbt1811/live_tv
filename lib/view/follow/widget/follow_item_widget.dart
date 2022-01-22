@@ -29,7 +29,7 @@ class FollowItemWidget extends StatelessWidget {
           SizedBox(
             width: 100.w,
             child: LabelButtonWidget(
-              label: user.followed ? 'Un Follow' : 'Follow',
+              label: user.followed ? 'Unfollow' : 'Follow',
               onPressed: onTap,
             ),
           )

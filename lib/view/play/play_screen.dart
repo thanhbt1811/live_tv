@@ -170,57 +170,54 @@ class _PlayScreenState extends State<PlayScreen> {
                                   );
                                 }),
                               ),
-                              SizedBox(
-                                height: 30.h,
-                                child: Row(
-                                  children: [
-                                    Expanded(
-                                      child: TextFieldWidget(
-                                        controller: _commentController,
-                                        hintText: 'Comment',
-                                        textStyle: ThemeText.subhead.copyWith(
-                                          color: AppColor.secondColor,
-                                        ),
-                                        onSubmitted: _commentSubmit,
-                                        borderColor: AppColor.secondColor,
-                                        suffixIcon: IconButton(
-                                          icon: Container(
-                                            decoration: BoxDecoration(
-                                                shape: BoxShape.circle),
-                                            child: SvgPicture.asset(
-                                                IconConstants.sendIcon,
-                                                width: 20.w,
-                                                height: 20.w,
-                                                color: AppColor.secondColor),
-                                          ),
-                                          onPressed: _sendComment,
-                                        ),
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child: TextFieldWidget(
+                                      controller: _commentController,
+                                      hintText: 'Comment',
+                                      textStyle: ThemeText.subhead.copyWith(
+                                        color: AppColor.secondColor,
                                       ),
-                                    ),
-                                    SizedBox(
-                                      width: 10.w,
-                                    ),
-                                    InkWell(
-                                      onTap: _giveStars,
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                          shape: BoxShape.circle,
-                                          border: Border.all(
-                                              color: AppColor.secondColor,
-                                              width: 1),
-                                        ),
-                                        child: Padding(
-                                          padding: EdgeInsets.all(5.w),
+                                      onSubmitted: _commentSubmit,
+                                      borderColor: AppColor.secondColor,
+                                      suffixIcon: IconButton(
+                                        icon: Container(
+                                          decoration: BoxDecoration(
+                                              shape: BoxShape.circle),
                                           child: SvgPicture.asset(
-                                            IconConstants.starIcon,
-                                            width: 20.w,
-                                            height: 20.w,
-                                          ),
+                                              IconConstants.sendIcon,
+                                              width: 20.w,
+                                              height: 20.w,
+                                              color: AppColor.secondColor),
+                                        ),
+                                        onPressed: _sendComment,
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: 10.w,
+                                  ),
+                                  InkWell(
+                                    onTap: _giveStars,
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        border: Border.all(
+                                            color: AppColor.secondColor,
+                                            width: 1),
+                                      ),
+                                      child: Padding(
+                                        padding: EdgeInsets.all(5.w),
+                                        child: SvgPicture.asset(
+                                          IconConstants.starIcon,
+                                          width: 20.w,
+                                          height: 20.w,
                                         ),
                                       ),
-                                    )
-                                  ],
-                                ),
+                                    ),
+                                  )
+                                ],
                               ),
                             ],
                           ),

@@ -23,7 +23,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final _userNameController = TextEditingController();
   final _passwordController = TextEditingController();
   final _loginFormKey = GlobalKey<FormState>();
-  final _showPasswordValue = ValueNotifier(false);
+  final _showPasswordValue = ValueNotifier(true);
   late SignInBloc _signInBloc;
   @override
   void initState() {

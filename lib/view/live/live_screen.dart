@@ -41,6 +41,7 @@ class _LiveScreenState extends State<LiveScreen> {
       ValueNotifier(ResolutionPreset.max);
   final ValueNotifier<bool> _cameraDescription = ValueNotifier(false);
   String? url;
+  String? _streamId;
   late StreamBloc _streamBloc;
   late CommentBloc _commentBloc;
   late ReactionBloc _reactionBloc;
@@ -196,6 +197,7 @@ class _LiveScreenState extends State<LiveScreen> {
                 listener: (context, state) {
                   if (state.status == StreamStatus.streaming &&
                       state.streamModel != null) {
+                    _streamId = '${state.streamModel!.id}';
                     _onVideoStreaming('${state.streamModel!.id}').then((value) {
                       if (mounted) setState(() {});
                       Wakelock.enable();
@@ -339,9 +341,15 @@ class _LiveScreenState extends State<LiveScreen> {
     );
   }
 
-  void _onChangeCamera() {
+  Future<void> _onChangeCamera() async {
     _cameraDescription.value = !_cameraDescription.value;
-    _onNewCameraSelected();
+    await _onNewCameraSelected();
+    if (_streamId != null) {
+      _onVideoStreaming(_streamId!).then((value) {
+        if (mounted) setState(() {});
+        Wakelock.enable();
+      });
+    }
   }
 
   void _showBottomSheetChangeResolution() {
@@ -355,10 +363,16 @@ class _LiveScreenState extends State<LiveScreen> {
             currentResolution: _resolutionValue.value));
   }
 
-  void _onChangeResolution(ResolutionPreset resolution) {
+  Future<void> _onChangeResolution(ResolutionPreset resolution) async {
     _resolutionValue.value = resolution;
-    _onNewCameraSelected();
+    await _onNewCameraSelected();
     Navigator.pop(context);
+    if (_streamId != null) {
+      _onVideoStreaming(_streamId!).then((value) {
+        if (mounted) setState(() {});
+        Wakelock.enable();
+      });
+    }
   }
 
   void _sendComment() {
@@ -419,7 +433,7 @@ class _LiveScreenState extends State<LiveScreen> {
     return url;
   }
 
-  void _onNewCameraSelected() async {
+  Future<void> _onNewCameraSelected() async {
     if (_cameraController != null) {
       await _cameraController!.dispose();
     }

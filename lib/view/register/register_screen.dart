@@ -24,6 +24,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final _displayNameController = TextEditingController();
   final _passwordController = TextEditingController();
   final _emailController = TextEditingController();
+  final _showPasswordValue = ValueNotifier(true);
   late SignUpBloc _signUpBloc;
   @override
   void initState() {
@@ -37,6 +38,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     _displayNameController.dispose();
     _passwordController.dispose();
     _emailController.dispose();
+    _showPasswordValue.dispose();
     super.dispose();
   }
 
@@ -95,17 +97,28 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   SizedBox(
                     height: 10.h,
                   ),
-                  TextFieldWidget(
-                    controller: _passwordController,
-                    hintText: RegisterScreenConstants.password,
-                    suffixIcon: IconButton(
-                        onPressed: null,
-                        icon: Icon(
-                          Icons.lock_outline,
-                          color: AppColor.black,
-                          size: 18.h,
-                        )),
-                  ),
+                  ValueListenableBuilder<bool>(
+                      valueListenable: _showPasswordValue,
+                      builder: (context, showValue, _) {
+                        return TextFieldWidget(
+                          controller: _passwordController,
+                          hintText: RegisterScreenConstants.password,
+                          obscureText: showValue,
+                          suffixIcon: IconButton(
+                              onPressed: _showPassword,
+                              icon: showValue
+                                  ? SvgPicture.asset(
+                                      IconConstants.eyeOffIcon,
+                                      height: 18.h,
+                                      width: 18.w,
+                                    )
+                                  : SvgPicture.asset(
+                                      IconConstants.eyeOnIcon,
+                                      height: 18.h,
+                                      width: 18.w,
+                                    )),
+                        );
+                      }),
                   SizedBox(
                     height: 10.h,
                   ),
@@ -141,5 +154,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
         password: _passwordController.text,
         email: _emailController.text,
         displayName: _displayNameController.text);
+  }
+
+  void _showPassword() {
+    _showPasswordValue.value = !_showPasswordValue.value;
   }
 }
